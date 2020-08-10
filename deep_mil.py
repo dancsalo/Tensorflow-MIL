@@ -38,7 +38,14 @@ class NoisyAnd(Layer):
 
     def compute_output_shape(self, input_shape):
         return input_shape[0], input_shape[3]
-
+    
+    #To avoid saving and loading model problems
+    def get_config(self):
+        config = super().get_config().copy()
+        config.update({
+            'output_dim': self.output_dim,
+        })
+        return config
 
 def define_model(input_shape, num_classes):
     """Define Deep FCN for MIL, layer-by-layer from original paper"""
