@@ -31,13 +31,14 @@ class NoisyAnd(Layer):
         super(NoisyAnd, self).build(input_shape)  # Be sure to call this at the end
 
     def call(self, x):
+        x = tf.math.sigmoid(x) #Adding the calculation of p(i,j) = Sigmoid(z(i,j))
         mean = tf.reduce_mean(x, axis=[1, 2])
         res = (tf.nn.sigmoid(self.a * (mean - self.b)) - tf.nn.sigmoid(-self.a * self.b)) / (
                 tf.nn.sigmoid(self.a * (1 - self.b)) - tf.nn.sigmoid(-self.a * self.b))
         return res
 
     def compute_output_shape(self, input_shape):
-        return input_shape[0], input_shape[3]
+        return input_shape[0], self.output_dim
 
 
 def define_model(input_shape, num_classes):
